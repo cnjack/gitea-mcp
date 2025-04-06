@@ -39,6 +39,10 @@ func Default() *zap.Logger {
 				MaxAge:     30,
 			}))
 
+			if flag.Mode == "sse" {
+				wss = append(wss, zapcore.AddSync(os.Stdout))
+			}
+
 			ws = zapcore.NewMultiWriteSyncer(wss...)
 
 			enc := zapcore.NewConsoleEncoder(ec)

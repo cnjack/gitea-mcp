@@ -80,6 +80,8 @@ func init() {
 		flagPkg.Token = os.Getenv("GITEA_ACCESS_TOKEN")
 	}
 
+	flagPkg.Mode = transport
+
 	if debug {
 		flagPkg.Debug = debug
 	}

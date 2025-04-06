@@ -5,6 +5,7 @@ var (
 	Port    int
 	Token   string
 	Version string
+	Mode    string
 
 	Debug bool
 )
