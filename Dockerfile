@@ -1,21 +1,37 @@
-FROM golang:1.24-alpine AS builder
+# Build stage
+FROM golang:1.24-bullseye AS builder
 
 ARG VERSION
 
-WORKDIR /build
+# Set the working directory
+WORKDIR /app
 
-COPY . .
+# Copy go.mod and go.sum files
+COPY go.mod go.sum ./
+
+# Download dependencies
 RUN go mod download
+
+# Copy the source code
+COPY . .
 
 RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.version=${VERSION}" -o gitea-mcp
 
-FROM ubuntu:24.04
+# Final stage
+FROM debian:bullseye-slim
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install ca-certificates --no-install-recommends -y
+# Install ca-certificates for HTTPS requests
+RUN apt-get update && \
+    apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /build/gitea-mcp .
+# Create a non-root user
+RUN useradd -r -u 1000 -m gitea-mcp
 
-CMD ["./gitea-mcp", "-t", "stdio"]
+COPY --from=builder --chown=1000:1000 /app/gitea-mcp .
+
+# Use the non-root user
+USER gitea-mcp
+
+CMD ["/app/gitea-mcp", "-t", "stdio"]
