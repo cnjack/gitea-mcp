@@ -37,7 +37,7 @@ func Default() *zap.Logger {
 			}
 			core := zapcore.NewCore(enc, ws, level)
 			options := []zap.Option{
-				zap.AddStacktrace(zapcore.ErrorLevel),
+				zap.AddStacktrace(zapcore.DPanicLevel),
 				zap.AddCaller(),
 				zap.AddCallerSkip(1),
 			}
