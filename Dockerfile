@@ -15,7 +15,7 @@ RUN go mod download
 # Copy the source code
 COPY . .
 
-RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.version=${VERSION}" -o gitea-mcp
+RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${VERSION}" -o gitea-mcp
 
 # Final stage
 FROM debian:bullseye-slim
