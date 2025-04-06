@@ -1,6 +1,7 @@
 package log
 
 import (
+	"fmt"
 	"os"
 	"sync"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/flag"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var (
@@ -20,12 +22,23 @@ func Default() *zap.Logger {
 		if defaultLogger == nil {
 			ec := zap.NewProductionEncoderConfig()
 			ec.EncodeTime = zapcore.TimeEncoderOfLayout(time.DateTime)
-			ec.EncodeLevel = zapcore.CapitalColorLevelEncoder
+			ec.EncodeLevel = zapcore.CapitalLevelEncoder
 
 			var ws zapcore.WriteSyncer
 			var wss []zapcore.WriteSyncer
 
-			wss = append(wss, zapcore.AddSync(os.Stdout))
+			home, _ := os.UserHomeDir()
+			if home == "" {
+				home = os.TempDir()
+			}
+
+			wss = append(wss, zapcore.AddSync(&lumberjack.Logger{
+				Filename:   fmt.Sprintf("%s/.gitea-mcp/gitea-mcp.log", home),
+				MaxSize:    100,
+				MaxBackups: 10,
+				MaxAge:     30,
+			}))
+
 			ws = zapcore.NewMultiWriteSyncer(wss...)
 
 			enc := zapcore.NewConsoleEncoder(ec)
