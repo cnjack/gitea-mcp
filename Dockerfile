@@ -9,9 +9,12 @@ RUN go mod download
 
 RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.version=${VERSION}" -o gitea-mcp
 
-FROM scratch
+FROM ubuntu:24.04
 
 WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install ca-certificates --no-install-recommends -y
 
 COPY --from=builder /build/gitea-mcp .
 
