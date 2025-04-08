@@ -77,12 +77,12 @@ git clone https://gitea.com/gitea/gitea-mcp.git
 然後運行：
 
 ```bash
-make build
+make install
 ```
 
 ### 📁 添加到 PATH
 
-構建後，將二進制文件 gitea-mcp 複製到系統 PATH 中包含的目錄。例如：
+安裝後，將二進制文件 gitea-mcp 複製到系統 PATH 中包含的目錄。例如：
 
 ```bash
 cp gitea-mcp /usr/local/bin/

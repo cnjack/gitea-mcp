@@ -77,12 +77,12 @@ Before building, make sure you have the following installed:
 Then run:
 
 ```bash
-make build
+make install
 ```
 
 ### 📁 Add to PATH
 
-After building, copy the binary gitea-mcp to a directory included in your system's PATH. For example:
+After installing, copy the binary gitea-mcp to a directory included in your system's PATH. For example:
 
 ```bash
 cp gitea-mcp /usr/local/bin/

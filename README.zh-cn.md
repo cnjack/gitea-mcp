@@ -77,7 +77,7 @@ git clone https://gitea.com/gitea/gitea-mcp.git
 然后运行：
 
 ```bash
-make build
+make install
 ```
 
 ### 📁 添加到 PATH
