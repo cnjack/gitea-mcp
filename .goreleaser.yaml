@@ -18,7 +18,7 @@ builds:
       - -trimpath
     ldflags:
       - -s -w
-      - -X main.version={{.Version}}
+      - -X main.Version={{.Version}}
 
 archives:
   - formats: tar.gz
