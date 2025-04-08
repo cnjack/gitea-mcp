@@ -35,7 +35,7 @@ func init() {
 	flag.StringVar(
 		&host,
 		"host",
-		"https://gitea.com",
+		os.Getenv("GITEA_HOST"),
 		"Gitea host",
 	)
 	flag.IntVar(
@@ -72,9 +72,6 @@ func init() {
 	flag.Parse()
 
 	flagPkg.Host = host
-	if flagPkg.Host == "" {
-		flagPkg.Host = os.Getenv("GITEA_HOST")
-	}
 	if flagPkg.Host == "" {
 		flagPkg.Host = "https://gitea.com"
 	}
