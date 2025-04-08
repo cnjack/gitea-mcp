@@ -109,6 +109,7 @@ cp gitea-mcp /usr/local/bin/
       ],
       "env": {
         // "GITEA_HOST": "https://gitea.com",
+        // "GITEA_INTERACTIVE": "true",
         "GITEA_ACCESS_TOKEN": "<your personal access token>"
       }
     }

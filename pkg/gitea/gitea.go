@@ -1,6 +1,8 @@
 package gitea
 
 import (
+	"crypto/tls"
+	"net/http"
 	"sync"
 
 	"gitea.com/gitea/gitea-mcp/pkg/flag"
@@ -16,12 +18,26 @@ var (
 
 func Client() *gitea.Client {
 	clientOnce.Do(func() {
-		if client == nil {
-			c, err := gitea.NewClient(flag.Host, gitea.SetToken(flag.Token))
-			if err != nil {
-				log.Fatalf("create gitea client err: %v", err)
+		var err error
+		if client != nil {
+			return
+		}
+		opts := []gitea.ClientOption{
+			gitea.SetToken(flag.Token),
+		}
+		if flag.Insecure {
+			httpClient := &http.Client{
+				Transport: &http.Transport{
+					TLSClientConfig: &tls.Config{
+						InsecureSkipVerify: true,
+					},
+				},
 			}
-			client = c
+			opts = append(opts, gitea.SetHTTPClient(httpClient))
+		}
+		client, err = gitea.NewClient(flag.Host, opts...)
+		if err != nil {
+			log.Fatalf("create gitea client err: %v", err)
 		}
 	})
 	return client

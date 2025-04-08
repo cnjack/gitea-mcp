@@ -62,6 +62,12 @@ func init() {
 		true,
 		"debug mode",
 	)
+	flag.BoolVar(
+		&flagPkg.Insecure,
+		"insecure",
+		false,
+		"ignore TLS certificate errors",
+	)
 
 	flag.Parse()
 
@@ -87,6 +93,11 @@ func init() {
 	}
 	if !debug {
 		flagPkg.Debug = os.Getenv("GITEA_DEBUG") == "true"
+	}
+
+	// Set insecure mode based on environment variable
+	if os.Getenv("GITEA_INSECURE") == "true" {
+		flagPkg.Insecure = true
 	}
 }
 

@@ -7,5 +7,6 @@ var (
 	Version string
 	Mode    string
 
-	Debug bool
+	Insecure bool
+	Debug    bool
 )

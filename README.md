@@ -109,6 +109,7 @@ To configure the MCP server for Gitea, add the following to your MCP configurati
       ],
       "env": {
         // "GITEA_HOST": "https://gitea.com",
+        // "GITEA_INTERACTIVE": "true",
         "GITEA_ACCESS_TOKEN": "<your personal access token>"
       }
     }
