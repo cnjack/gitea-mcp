@@ -154,6 +154,15 @@ The Gitea MCP Server supports the following tools:
 |        create_branch         |    Branch    |                  Create a new branch                  |
 |        delete_branch         |    Branch    |                    Delete a branch                    |
 |        list_branches         |    Branch    |           List all branches in a repository           |
+|        create_release        |    Release   |           Create a new release in a repository        |
+|        delete_release        |    Release   |           Delete a release from a repository          |
+|        get_release           |    Release   |                     Get a release                     |
+|      get_latest_release      |    Release   |         Get the latest release in a repository        |
+|        list_releases         |    Release   |           List all releases in a repository           |
+|          create_tag          |     Tag      |                   Create a new tag                    |
+|          delete_tag          |     Tag      |                     Delete a tag                      |
+|           get_tag            |     Tag      |                      Get a tag                        |
+|          list_tags           |     Tag      |               List all tags in a repository           |
 |      list_repo_commits       |    Commit    |           List all commits in a repository            |
 |       get_file_content       |     File     |        Get the content and metadata of a file         |
 |         create_file          |     File     |                   Create a new file                   |

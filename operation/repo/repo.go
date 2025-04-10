@@ -70,6 +70,19 @@ func RegisterTool(s *server.MCPServer) {
 	s.AddTool(DeleteBranchTool, DeleteBranchFn)
 	s.AddTool(ListBranchesTool, ListBranchesFn)
 
+	// Release
+	s.AddTool(CreateReleaseTool, CreateReleaseFn)
+	s.AddTool(DeleteReleaseTool, DeleteReleaseFn)
+	s.AddTool(GetReleaseTool, GetReleaseFn)
+	s.AddTool(GetLatestReleaseTool, GetLatestReleaseFn)
+	s.AddTool(ListReleasesTool, ListReleasesFn)
+
+	// Tag
+	s.AddTool(CreateTagTool, CreateTagFn)
+	s.AddTool(DeleteTagTool, DeleteTagFn)
+	s.AddTool(GetTagTool, GetTagFn)
+	s.AddTool(ListTagsTool, ListTagsFn)
+
 	// Commit
 	s.AddTool(ListRepoCommitsTool, ListRepoCommitsFn)
 }

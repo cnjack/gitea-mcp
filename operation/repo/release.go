@@ -1,0 +1,230 @@
+package repo
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	gitea_sdk "code.gitea.io/sdk/gitea"
+	"gitea.com/gitea/gitea-mcp/pkg/gitea"
+	"gitea.com/gitea/gitea-mcp/pkg/log"
+	"gitea.com/gitea/gitea-mcp/pkg/ptr"
+	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"github.com/mark3labs/mcp-go/mcp"
+)
+
+const (
+	CreateReleaseToolName    = "create_release"
+	DeleteReleaseToolName    = "delete_release"
+	GetReleaseToolName       = "get_release"
+	GetLatestReleaseToolName = "get_latest_release"
+	ListReleasesToolName     = "list_releases"
+)
+
+var (
+	CreateReleaseTool = mcp.NewTool(
+		CreateReleaseToolName,
+		mcp.WithDescription("Create release"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithString("tag_name", mcp.Required(), mcp.Description("tag name")),
+		mcp.WithString("target", mcp.Required(), mcp.Description("target commitish")),
+		mcp.WithString("title", mcp.Required(), mcp.Description("release title")),
+		mcp.WithBoolean("is_draft", mcp.Description("Whether the release is draft"), mcp.DefaultBool(false)),
+		mcp.WithBoolean("is_pre_release", mcp.Description("Whether the release is pre-release"), mcp.DefaultBool(false)),
+	)
+
+	DeleteReleaseTool = mcp.NewTool(
+		DeleteReleaseToolName,
+		mcp.WithDescription("Delete release"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithNumber("id", mcp.Required(), mcp.Description("release id")),
+	)
+
+	GetReleaseTool = mcp.NewTool(
+		GetReleaseToolName,
+		mcp.WithDescription("Get release"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithNumber("id", mcp.Required(), mcp.Description("release id")),
+	)
+
+	GetLatestReleaseTool = mcp.NewTool(
+		GetLatestReleaseToolName,
+		mcp.WithDescription("Get latest release"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+	)
+
+	ListReleasesTool = mcp.NewTool(
+		ListReleasesToolName,
+		mcp.WithDescription("List releases"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithBoolean("is_draft", mcp.Description("Whether the release is draft"), mcp.DefaultBool(false)),
+		mcp.WithBoolean("is_pre_release", mcp.Description("Whether the release is pre-release"), mcp.DefaultBool(false)),
+		mcp.WithNumber("page", mcp.Description("page number"), mcp.DefaultNumber(1), mcp.Min(1)),
+		mcp.WithNumber("pageSize", mcp.Description("page size"), mcp.DefaultNumber(20), mcp.Min(1)),
+	)
+)
+
+// To avoid return too many tokens, we need to provide at least information as possible
+// llm can call get release to get more information
+type ListReleaseResult struct {
+	ID           int64     `json:"id"`
+	TagName      string    `json:"tag_name"`
+	Target       string    `json:"target_commitish"`
+	Title        string    `json:"title"`
+	IsDraft      bool      `json:"draft"`
+	IsPrerelease bool      `json:"prerelease"`
+	CreatedAt    time.Time `json:"created_at"`
+	PublishedAt  time.Time `json:"published_at"`
+}
+
+func CreateReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called CreateReleasesFn")
+	owner, ok := req.Params.Arguments["owner"].(string)
+	if !ok {
+		return nil, fmt.Errorf("owner is required")
+	}
+	repo, ok := req.Params.Arguments["repo"].(string)
+	if !ok {
+		return nil, fmt.Errorf("repo is required")
+	}
+	tagName, ok := req.Params.Arguments["tag_name"].(string)
+	if !ok {
+		return nil, fmt.Errorf("tag_name is required")
+	}
+	target, ok := req.Params.Arguments["target"].(string)
+	if !ok {
+		return nil, fmt.Errorf("target is required")
+	}
+	title, ok := req.Params.Arguments["title"].(string)
+	if !ok {
+		return nil, fmt.Errorf("title is required")
+	}
+	isDraft, _ := req.Params.Arguments["is_draft"].(bool)
+	isPreRelease, _ := req.Params.Arguments["is_pre_release"].(bool)
+
+	_, _, err := gitea.Client().CreateRelease(owner, repo, gitea_sdk.CreateReleaseOption{
+		TagName:      tagName,
+		Target:       target,
+		Title:        title,
+		IsDraft:      isDraft,
+		IsPrerelease: isPreRelease,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("create release error: %v", err)
+	}
+
+	return mcp.NewToolResultText("Release Created"), nil
+}
+
+func DeleteReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called DeleteReleaseFn")
+	owner, ok := req.Params.Arguments["owner"].(string)
+	if !ok {
+		return nil, fmt.Errorf("owner is required")
+	}
+	repo, ok := req.Params.Arguments["repo"].(string)
+	if !ok {
+		return nil, fmt.Errorf("repo is required")
+	}
+	id, ok := req.Params.Arguments["id"].(float64)
+	if !ok {
+		return nil, fmt.Errorf("id is required")
+	}
+
+	_, err := gitea.Client().DeleteRelease(owner, repo, int64(id))
+	if err != nil {
+		return nil, fmt.Errorf("delete release error: %v", err)
+	}
+
+	return to.TextResult("Release deleted successfully")
+}
+
+func GetReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called GetReleaseFn")
+	owner, ok := req.Params.Arguments["owner"].(string)
+	if !ok {
+		return nil, fmt.Errorf("owner is required")
+	}
+	repo, ok := req.Params.Arguments["repo"].(string)
+	if !ok {
+		return nil, fmt.Errorf("repo is required")
+	}
+	id, ok := req.Params.Arguments["id"].(float64)
+	if !ok {
+		return nil, fmt.Errorf("id is required")
+	}
+
+	release, _, err := gitea.Client().GetRelease(owner, repo, int64(id))
+	if err != nil {
+		return nil, fmt.Errorf("get release error: %v", err)
+	}
+
+	return to.TextResult(release)
+}
+
+func GetLatestReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called GetLatestReleaseFn")
+	owner, ok := req.Params.Arguments["owner"].(string)
+	if !ok {
+		return nil, fmt.Errorf("owner is required")
+	}
+	repo, ok := req.Params.Arguments["repo"].(string)
+	if !ok {
+		return nil, fmt.Errorf("repo is required")
+	}
+
+	release, _, err := gitea.Client().GetLatestRelease(owner, repo)
+	if err != nil {
+		return nil, fmt.Errorf("get latest release error: %v", err)
+	}
+
+	return to.TextResult(release)
+}
+
+func ListReleasesFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called ListReleasesFn")
+	owner, ok := req.Params.Arguments["owner"].(string)
+	if !ok {
+		return nil, fmt.Errorf("owner is required")
+	}
+	repo, ok := req.Params.Arguments["repo"].(string)
+	if !ok {
+		return nil, fmt.Errorf("repo is required")
+	}
+	isDraft, _ := req.Params.Arguments["is_draft"].(bool)
+	isPreRelease, _ := req.Params.Arguments["is_pre_release"].(bool)
+	page, _ := req.Params.Arguments["page"].(float64)
+	pageSize, _ := req.Params.Arguments["pageSize"].(float64)
+
+	releases, _, err := gitea.Client().ListReleases(owner, repo, gitea_sdk.ListReleasesOptions{
+		ListOptions: gitea_sdk.ListOptions{
+			Page:     int(page),
+			PageSize: int(pageSize),
+		},
+		IsDraft:      ptr.To(isDraft),
+		IsPreRelease: ptr.To(isPreRelease),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("list releases error: %v", err)
+	}
+
+	results := make([]ListReleaseResult, len(releases))
+	for _, release := range releases {
+		results = append(results, ListReleaseResult{
+			ID:           release.ID,
+			TagName:      release.TagName,
+			Target:       release.Target,
+			Title:        release.Title,
+			IsDraft:      release.IsDraft,
+			IsPrerelease: release.IsPrerelease,
+			CreatedAt:    release.CreatedAt,
+			PublishedAt:  release.PublishedAt,
+		})
+	}
+	return to.TextResult(results)
+}
