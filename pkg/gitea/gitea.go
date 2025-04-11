@@ -35,6 +35,9 @@ func Client() *gitea.Client {
 			}
 			opts = append(opts, gitea.SetHTTPClient(httpClient))
 		}
+		if flag.Debug {
+			opts = append(opts, gitea.SetDebugMode())
+		}
 		client, err = gitea.NewClient(flag.Host, opts...)
 		if err != nil {
 			log.Fatalf("create gitea client err: %v", err)
