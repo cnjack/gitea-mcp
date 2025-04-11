@@ -11,7 +11,8 @@
         "golang.go",
         "stylelint.vscode-stylelint",
         "DavidAnson.vscode-markdownlint",
-        "github.copilot"
+        "github.copilot",
+        "eamodio.gitlens"
       ]
     }
   }
