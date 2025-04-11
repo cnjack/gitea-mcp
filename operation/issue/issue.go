@@ -6,6 +6,7 @@ import (
 
 	"gitea.com/gitea/gitea-mcp/pkg/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/log"
+	"gitea.com/gitea/gitea-mcp/pkg/ptr"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
@@ -18,6 +19,7 @@ const (
 	ListRepoIssuesToolName     = "list_repo_issues"
 	CreateIssueToolName        = "create_issue"
 	CreateIssueCommentToolName = "create_issue_comment"
+	EditIssueToolName          = "edit_issue"
 )
 
 var (
@@ -55,6 +57,18 @@ var (
 		mcp.WithNumber("index", mcp.Required(), mcp.Description("repository issue index")),
 		mcp.WithString("body", mcp.Required(), mcp.Description("issue comment body")),
 	)
+	EditIssueTool = mcp.NewTool(
+		EditIssueToolName,
+		mcp.WithDescription("edit issue"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithNumber("index", mcp.Required(), mcp.Description("repository issue index")),
+		mcp.WithString("title", mcp.Description("issue title"), mcp.DefaultString("")),
+		mcp.WithString("body", mcp.Description("issue body content")),
+		mcp.WithArray("assignees", mcp.Description("usernames to assign to this issue"), mcp.Items(map[string]interface{}{"type": "string"})),
+		mcp.WithNumber("milestone", mcp.Description("milestone number")),
+		mcp.WithString("state", mcp.Description("issue state, one of open, closed, all")),
+	)
 )
 
 func RegisterTool(s *server.MCPServer) {
@@ -62,6 +76,7 @@ func RegisterTool(s *server.MCPServer) {
 	s.AddTool(ListRepoIssuesTool, ListRepoIssuesFn)
 	s.AddTool(CreateIssueTool, CreateIssueFn)
 	s.AddTool(CreateIssueCommentTool, CreateIssueCommentFn)
+	s.AddTool(EditIssueTool, EditIssueFn)
 }
 
 func GetIssueByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
@@ -178,4 +193,50 @@ func CreateIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.Ca
 	}
 
 	return to.TextResult(issueComment)
+}
+
+func EditIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called EditIssueFn")
+	owner, ok := req.Params.Arguments["owner"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("owner is required"))
+	}
+	repo, ok := req.Params.Arguments["repo"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("repo is required"))
+	}
+	index, ok := req.Params.Arguments["index"].(float64)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("index is required"))
+	}
+
+	opt := gitea_sdk.EditIssueOption{}
+
+	title, ok := req.Params.Arguments["title"].(string)
+	if ok {
+		opt.Title = title
+	}
+	body, ok := req.Params.Arguments["body"].(string)
+	if ok {
+		opt.Body = ptr.To(body)
+	}
+	assignees, ok := req.Params.Arguments["assignees"].([]string)
+	if ok {
+		opt.Assignees = assignees
+	}
+	milestone, ok := req.Params.Arguments["milestone"].(float64)
+	if ok {
+		opt.Milestone = ptr.To(int64(milestone))
+	}
+	state, ok := req.Params.Arguments["state"].(string)
+	if ok {
+		opt.State = ptr.To(gitea_sdk.StateType(state))
+	}
+
+	issue, _, err := gitea.Client().EditIssue(owner, repo, int64(index), opt)
+	if err != nil {
+		return to.ErrorResult(fmt.Errorf("edit %v/%v/issue/%v err: %v", owner, repo, int64(index), err))
+	}
+
+	return to.TextResult(issue)
 }

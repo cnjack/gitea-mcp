@@ -172,6 +172,7 @@ Gitea MCP 服务器支持以下工具：
 |       list_repo_issues       |   问题   |     列出仓库中的所有问题     |
 |         create_issue         |   问题   |        创建一个新问题        |
 |     create_issue_comment     |   问题   |       在问题上创建评论       |
+|          edit_issue          |   问题   |         编辑一个问题        |
 |  get_pull_request_by_index   | 拉取请求 |     根据索引获取拉取请求     |
 |   list_repo_pull_requests    | 拉取请求 |   列出仓库中的所有拉取请求   |
 |     create_pull_request      | 拉取请求 |      创建一个新拉取请求      |
