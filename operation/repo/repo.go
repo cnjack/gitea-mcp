@@ -148,7 +148,7 @@ func ForkRepoFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResu
 	}
 	_, _, err := gitea.Client().CreateFork(user, repo, opt)
 	if err != nil {
-		return to.ErrorResult(fmt.Errorf("fork repository error %v", err))
+		return to.ErrorResult(fmt.Errorf("fork repository error: %v", err))
 	}
 	return to.TextResult("Fork success")
 }

@@ -145,7 +145,7 @@ func CreateIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolR
 		Body:  body,
 	})
 	if err != nil {
-		return to.ErrorResult(fmt.Errorf("create %v/%v/issue err", owner, repo))
+		return to.ErrorResult(fmt.Errorf("create %v/%v/issue err: %v", owner, repo, err))
 	}
 
 	return to.TextResult(issue)
@@ -174,7 +174,7 @@ func CreateIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.Ca
 	}
 	issueComment, _, err := gitea.Client().CreateIssueComment(owner, repo, int64(index), opt)
 	if err != nil {
-		return to.ErrorResult(fmt.Errorf("create %v/%v/issue/%v/comment err", owner, repo, int64(index)))
+		return to.ErrorResult(fmt.Errorf("create %v/%v/issue/%v/comment err: %v", owner, repo, int64(index), err))
 	}
 
 	return to.TextResult(issueComment)
