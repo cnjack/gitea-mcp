@@ -144,7 +144,7 @@ func UpdateFileFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolRe
 
 	opt := gitea_sdk.UpdateFileOptions{
 		SHA:     sha,
-		Content: content,
+		Content: base64.StdEncoding.EncodeToString([]byte(content)),
 		FileOptions: gitea_sdk.FileOptions{
 			Message:    message,
 			BranchName: branchName,
