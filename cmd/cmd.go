@@ -16,7 +16,7 @@ var (
 	port      int
 	token     string
 
-	debug bool
+	debug *bool
 )
 
 func init() {
@@ -50,17 +50,14 @@ func init() {
 		"",
 		"Your personal access token",
 	)
-	flag.BoolVar(
-		&debug,
+	flag.BoolFunc(
 		"d",
-		true,
-		"debug mode",
-	)
-	flag.BoolVar(
-		&debug,
-		"debug",
-		true,
-		"debug mode",
+		"debug mode (If -d flag is provided, debug mode will be enabled by default)",
+		func(string) error {
+			debug = new(bool)
+			*debug = true
+			return nil
+		},
 	)
 	flag.BoolVar(
 		&flagPkg.Insecure,
@@ -85,10 +82,10 @@ func init() {
 
 	flagPkg.Mode = transport
 
-	if debug {
-		flagPkg.Debug = debug
+	if debug != nil && *debug {
+		flagPkg.Debug = *debug
 	}
-	if !debug {
+	if debug != nil && !*debug {
 		flagPkg.Debug = os.Getenv("GITEA_DEBUG") == "true"
 	}
 
