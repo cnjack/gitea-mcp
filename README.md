@@ -148,6 +148,7 @@ The Gitea MCP Server supports the following tools:
 |             Tool             |    Scope     |                      Description                      |
 | :--------------------------: | :----------: | :---------------------------------------------------: |
 |       get_my_user_info       |     User     |     Get the information of the authenticated user     |
+|       get_user_orgs       |     User     |     Get organizations associated with the authenticated user     |
 |         create_repo          |  Repository  |                Create a new repository                |
 |          fork_repo           |  Repository  |                   Fork a repository                   |
 |        list_my_repos         |  Repository  | List all repositories owned by the authenticated user |

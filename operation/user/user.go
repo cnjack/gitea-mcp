@@ -8,12 +8,14 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
 
+	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
 
 const (
 	GetMyUserInfoToolName = "get_my_user_info"
+	GetUserOrgsToolName   = "get_user_orgs"
 )
 
 var (
@@ -21,10 +23,18 @@ var (
 		GetMyUserInfoToolName,
 		mcp.WithDescription("Get my user info"),
 	)
+
+	GetUserOrgsTool = mcp.NewTool(
+		GetUserOrgsToolName,
+		mcp.WithDescription("Get organizations associated with the authenticated user"),
+		mcp.WithNumber("page", mcp.Description("page number"), mcp.DefaultNumber(1)),
+		mcp.WithNumber("pageSize", mcp.Description("page size"), mcp.DefaultNumber(100)),
+	)
 )
 
 func RegisterTool(s *server.MCPServer) {
 	s.AddTool(GetMyUserInfoTool, GetUserInfoFn)
+	s.AddTool(GetUserOrgsTool, GetUserOrgsFn)
 }
 
 func GetUserInfoFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
@@ -35,4 +45,28 @@ func GetUserInfoFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolR
 	}
 
 	return to.TextResult(user)
+}
+
+func GetUserOrgsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called GetUserOrgsFn")
+	page, ok := req.Params.Arguments["page"].(float64)
+	if !ok || page < 1 {
+		page = 1
+	}
+	pageSize, ok := req.Params.Arguments["pageSize"].(float64)
+	if !ok || pageSize < 1 {
+		pageSize = 100
+	}
+	opt := gitea_sdk.ListOrgsOptions{
+		ListOptions: gitea_sdk.ListOptions{
+			Page:     int(page),
+			PageSize: int(pageSize),
+		},
+	}
+	orgs, _, err := gitea.Client().ListMyOrgs(opt)
+	if err != nil {
+		return to.ErrorResult(fmt.Errorf("get user orgs err: %v", err))
+	}
+
+	return to.TextResult(orgs)
 }
