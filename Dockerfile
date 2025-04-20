@@ -20,7 +20,7 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${VERSION}" -o gitea-
 # Final stage
 FROM debian:bullseye-slim
 
-ENV GITEA_MODE stdio
+ENV GITEA_MODE=stdio
 
 WORKDIR /app
 
