@@ -4,11 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	gitea_sdk "code.gitea.io/sdk/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+
+	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 )
 
 const (
@@ -54,6 +56,25 @@ var (
 		mcp.WithNumber("pageSize", mcp.Description("page size"), mcp.DefaultNumber(20), mcp.Min(1)),
 	)
 )
+
+func init() {
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateTagTool,
+		Handler: CreateTagFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    DeleteTagTool,
+		Handler: DeleteTagFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetTagTool,
+		Handler: GetTagFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListTagsTool,
+		Handler: ListTagsFn,
+	})
+}
 
 // To avoid return too many tokens, we need to provide at least information as possible
 // llm can call get tag to get more information

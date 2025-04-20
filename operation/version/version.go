@@ -7,10 +7,13 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/flag"
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"gitea.com/gitea/gitea-mcp/pkg/tool"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+var Tool = tool.New()
 
 const (
 	GetGiteaMCPServerVersion = "get_gitea_mcp_server_version"
@@ -23,8 +26,11 @@ var (
 	)
 )
 
-func RegisterTool(s *server.MCPServer) {
-	s.AddTool(GetGiteaMCPServerVersionTool, GetGiteaMCPServerVersionFn)
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetGiteaMCPServerVersionTool,
+		Handler: GetGiteaMCPServerVersionFn,
+	})
 }
 
 func GetGiteaMCPServerVersionFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

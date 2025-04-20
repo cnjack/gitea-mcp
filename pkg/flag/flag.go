@@ -8,5 +8,6 @@ var (
 	Mode    string
 
 	Insecure bool
+	ReadOnly bool
 	Debug    bool
 )

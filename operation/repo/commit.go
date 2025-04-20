@@ -10,6 +10,7 @@ import (
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 )
 
 const (
@@ -28,6 +29,13 @@ var (
 		mcp.WithNumber("page_size", mcp.Required(), mcp.Description("page size"), mcp.DefaultNumber(50), mcp.Min(1)),
 	)
 )
+
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListRepoCommitsTool,
+		Handler: ListRepoCommitsFn,
+	})
+}
 
 func ListRepoCommitsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called ListRepoCommitsFn")

@@ -9,11 +9,14 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/ptr"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"gitea.com/gitea/gitea-mcp/pkg/tool"
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+var Tool = tool.New()
 
 const (
 	CreateRepoToolName  = "create_repo"
@@ -53,6 +56,21 @@ var (
 		mcp.WithNumber("pageSize", mcp.Required(), mcp.Description("Page size number"), mcp.DefaultNumber(100), mcp.Min(1)),
 	)
 )
+
+func init() {
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateRepoTool,
+		Handler: CreateRepoFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    ForkRepoTool,
+		Handler: ForkRepoFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListMyReposTool,
+		Handler: ListMyReposFn,
+	})
+}
 
 func RegisterTool(s *server.MCPServer) {
 	s.AddTool(CreateRepoTool, CreateRepoFn)

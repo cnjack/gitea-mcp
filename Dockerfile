@@ -20,6 +20,8 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${VERSION}" -o gitea-
 # Final stage
 FROM debian:bullseye-slim
 
+ENV GITEA_MODE stdio
+
 WORKDIR /app
 
 # Install ca-certificates for HTTPS requests
@@ -34,4 +36,4 @@ COPY --from=builder --chown=1000:1000 /app/gitea-mcp .
 # Use the non-root user
 USER gitea-mcp
 
-CMD ["/app/gitea-mcp", "-t", "stdio"]
+CMD ["/app/gitea-mcp"]

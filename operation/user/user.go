@@ -7,6 +7,7 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"gitea.com/gitea/gitea-mcp/pkg/tool"
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -17,6 +18,8 @@ const (
 	GetMyUserInfoToolName = "get_my_user_info"
 	GetUserOrgsToolName   = "get_user_orgs"
 )
+
+var Tool = tool.New()
 
 var (
 	GetMyUserInfoTool = mcp.NewTool(
@@ -32,9 +35,16 @@ var (
 	)
 )
 
-func RegisterTool(s *server.MCPServer) {
-	s.AddTool(GetMyUserInfoTool, GetUserInfoFn)
-	s.AddTool(GetUserOrgsTool, GetUserOrgsFn)
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetMyUserInfoTool,
+		Handler: GetUserInfoFn,
+	})
+
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetUserOrgsTool,
+		Handler: GetUserOrgsFn,
+	})
 }
 
 func GetUserInfoFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

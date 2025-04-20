@@ -11,23 +11,20 @@ import (
 )
 
 var (
-	transport string
-	host      string
-	port      int
-	token     string
-
-	debug *bool
+	host  string
+	port  int
+	token string
 )
 
 func init() {
 	flag.StringVar(
-		&transport,
+		&flagPkg.Mode,
 		"t",
 		"stdio",
 		"Transport type (stdio or sse)",
 	)
 	flag.StringVar(
-		&transport,
+		&flagPkg.Mode,
 		"transport",
 		"stdio",
 		"Transport type (stdio or sse)",
@@ -50,14 +47,17 @@ func init() {
 		"",
 		"Your personal access token",
 	)
-	flag.BoolFunc(
+	flag.BoolVar(
+		&flagPkg.ReadOnly,
+		"read-only",
+		false,
+		"Read-only mode",
+	)
+	flag.BoolVar(
+		&flagPkg.Debug,
 		"d",
+		false,
 		"debug mode (If -d flag is provided, debug mode will be enabled by default)",
-		func(string) error {
-			debug = new(bool)
-			*debug = true
-			return nil
-		},
 	)
 	flag.BoolVar(
 		&flagPkg.Insecure,
@@ -80,13 +80,16 @@ func init() {
 		flagPkg.Token = os.Getenv("GITEA_ACCESS_TOKEN")
 	}
 
-	flagPkg.Mode = transport
-
-	if debug != nil && *debug {
-		flagPkg.Debug = *debug
+	if os.Getenv("GITEA_MODE") != "" {
+		flagPkg.Mode = os.Getenv("GITEA_MODE")
 	}
-	if debug != nil && !*debug {
-		flagPkg.Debug = os.Getenv("GITEA_DEBUG") == "true"
+
+	if os.Getenv("GITEA_READONLY") == "true" {
+		flagPkg.ReadOnly = true
+	}
+
+	if os.Getenv("GITEA_DEBUG") == "true" {
+		flagPkg.Debug = true
 	}
 
 	// Set insecure mode based on environment variable
@@ -95,9 +98,9 @@ func init() {
 	}
 }
 
-func Execute(version string) {
+func Execute() {
 	defer log.Default().Sync()
-	if err := operation.Run(transport, version); err != nil {
+	if err := operation.Run(); err != nil {
 		if err == context.Canceled {
 			log.Info("Server shutdown due to context cancellation")
 			return

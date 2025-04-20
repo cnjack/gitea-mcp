@@ -8,11 +8,14 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/ptr"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"gitea.com/gitea/gitea-mcp/pkg/tool"
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+var Tool = tool.New()
 
 const (
 	SearchUsersToolName    = "search_users"
@@ -55,10 +58,19 @@ var (
 	)
 )
 
-func RegisterTool(s *server.MCPServer) {
-	s.AddTool(SearchUsersTool, SearchUsersFn)
-	s.AddTool(SearOrgTeamsTool, SearchOrgTeamsFn)
-	s.AddTool(SearchReposTool, SearchReposFn)
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    SearchUsersTool,
+		Handler: SearchUsersFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    SearOrgTeamsTool,
+		Handler: SearchOrgTeamsFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    SearchReposTool,
+		Handler: SearchReposFn,
+	})
 }
 
 func SearchUsersFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

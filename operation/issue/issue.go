@@ -8,11 +8,14 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/ptr"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"gitea.com/gitea/gitea-mcp/pkg/tool"
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+var Tool = tool.New()
 
 const (
 	GetIssueByIndexToolName    = "get_issue_by_index"
@@ -71,12 +74,27 @@ var (
 	)
 )
 
-func RegisterTool(s *server.MCPServer) {
-	s.AddTool(GetIssueByIndexTool, GetIssueByIndexFn)
-	s.AddTool(ListRepoIssuesTool, ListRepoIssuesFn)
-	s.AddTool(CreateIssueTool, CreateIssueFn)
-	s.AddTool(CreateIssueCommentTool, CreateIssueCommentFn)
-	s.AddTool(EditIssueTool, EditIssueFn)
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetIssueByIndexTool,
+		Handler: GetIssueByIndexFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListRepoIssuesTool,
+		Handler: ListRepoIssuesFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateIssueTool,
+		Handler: CreateIssueFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateIssueCommentTool,
+		Handler: CreateIssueCommentFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    EditIssueTool,
+		Handler: EditIssueFn,
+	})
 }
 
 func GetIssueByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

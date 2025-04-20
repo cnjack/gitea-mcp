@@ -10,6 +10,7 @@ import (
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 )
 
 const (
@@ -43,6 +44,21 @@ var (
 		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
 	)
 )
+
+func init() {
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateBranchTool,
+		Handler: CreateBranchFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    DeleteBranchTool,
+		Handler: DeleteBranchFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListBranchesTool,
+		Handler: ListBranchesFn,
+	})
+}
 
 func CreateBranchFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called CreateBranchFn")

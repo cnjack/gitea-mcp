@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	gitea_sdk "code.gitea.io/sdk/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/ptr"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+
+	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 )
 
 const (
@@ -68,6 +70,29 @@ var (
 		mcp.WithNumber("pageSize", mcp.Description("page size"), mcp.DefaultNumber(20), mcp.Min(1)),
 	)
 )
+
+func init() {
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateReleaseTool,
+		Handler: CreateReleaseFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    DeleteReleaseTool,
+		Handler: DeleteReleaseFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetReleaseTool,
+		Handler: GetReleaseFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetLatestReleaseTool,
+		Handler: GetLatestReleaseFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListReleasesTool,
+		Handler: ListReleasesFn,
+	})
+}
 
 // To avoid return too many tokens, we need to provide at least information as possible
 // llm can call get release to get more information

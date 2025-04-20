@@ -7,11 +7,14 @@ import (
 	"gitea.com/gitea/gitea-mcp/pkg/gitea"
 	"gitea.com/gitea/gitea-mcp/pkg/log"
 	"gitea.com/gitea/gitea-mcp/pkg/to"
+	"gitea.com/gitea/gitea-mcp/pkg/tool"
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
+
+var Tool = tool.New()
 
 const (
 	GetPullRequestByIndexToolName = "get_pull_request_by_index"
@@ -52,10 +55,19 @@ var (
 	)
 )
 
-func RegisterTool(s *server.MCPServer) {
-	s.AddTool(GetPullRequestByIndexTool, GetPullRequestByIndexFn)
-	s.AddTool(ListRepoPullRequestsTool, ListRepoPullRequestsFn)
-	s.AddTool(CreatePullRequestTool, CreatePullRequestFn)
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetPullRequestByIndexTool,
+		Handler: GetPullRequestByIndexFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    ListRepoPullRequestsTool,
+		Handler: ListRepoPullRequestsFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreatePullRequestTool,
+		Handler: CreatePullRequestFn,
+	})
 }
 
 func GetPullRequestByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

@@ -11,6 +11,7 @@ import (
 
 	gitea_sdk "code.gitea.io/sdk/gitea"
 	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 )
 
 const (
@@ -65,6 +66,25 @@ var (
 		mcp.WithString("sha", mcp.Description("sha")),
 	)
 )
+
+func init() {
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetFileContentTool,
+		Handler: GetFileContentFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    CreateFileTool,
+		Handler: CreateFileFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    UpdateFileTool,
+		Handler: UpdateFileFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool:    DeleteFileTool,
+		Handler: DeleteFileFn,
+	})
+}
 
 func GetFileContentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called GetFileFn")
