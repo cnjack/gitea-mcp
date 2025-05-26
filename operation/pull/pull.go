@@ -72,15 +72,15 @@ func init() {
 
 func GetPullRequestByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called GetPullRequestByIndexFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	index, ok := req.Params.Arguments["index"].(float64)
+	index, ok := req.GetArguments()["index"].(float64)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("index is required"))
 	}
@@ -94,25 +94,25 @@ func GetPullRequestByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp
 
 func ListRepoPullRequestsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called ListRepoPullRequests")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	state, _ := req.Params.Arguments["state"].(string)
-	sort, ok := req.Params.Arguments["sort"].(string)
+	state, _ := req.GetArguments()["state"].(string)
+	sort, ok := req.GetArguments()["sort"].(string)
 	if !ok {
 		sort = "recentupdate"
 	}
-	milestone, _ := req.Params.Arguments["milestone"].(float64)
-	page, ok := req.Params.Arguments["page"].(float64)
+	milestone, _ := req.GetArguments()["milestone"].(float64)
+	page, ok := req.GetArguments()["page"].(float64)
 	if !ok {
 		page = 1
 	}
-	pageSize, ok := req.Params.Arguments["pageSize"].(float64)
+	pageSize, ok := req.GetArguments()["pageSize"].(float64)
 	if !ok {
 		pageSize = 100
 	}
@@ -135,27 +135,27 @@ func ListRepoPullRequestsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.
 
 func CreatePullRequestFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called CreatePullRequestFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	title, ok := req.Params.Arguments["title"].(string)
+	title, ok := req.GetArguments()["title"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("title is required"))
 	}
-	body, ok := req.Params.Arguments["body"].(string)
+	body, ok := req.GetArguments()["body"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("body is required"))
 	}
-	head, ok := req.Params.Arguments["head"].(string)
+	head, ok := req.GetArguments()["head"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("head is required"))
 	}
-	base, ok := req.Params.Arguments["base"].(string)
+	base, ok := req.GetArguments()["base"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("base is required"))
 	}

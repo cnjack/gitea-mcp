@@ -75,15 +75,15 @@ func init() {
 
 func SearchUsersFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called SearchUsersFn")
-	keyword, ok := req.Params.Arguments["keyword"].(string)
+	keyword, ok := req.GetArguments()["keyword"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("keyword is required"))
 	}
-	page, ok := req.Params.Arguments["page"].(float64)
+	page, ok := req.GetArguments()["page"].(float64)
 	if !ok {
 		page = 1
 	}
-	pageSize, ok := req.Params.Arguments["pageSize"].(float64)
+	pageSize, ok := req.GetArguments()["pageSize"].(float64)
 	if !ok {
 		pageSize = 100
 	}
@@ -103,20 +103,20 @@ func SearchUsersFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolR
 
 func SearchOrgTeamsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called SearchOrgTeamsFn")
-	org, ok := req.Params.Arguments["org"].(string)
+	org, ok := req.GetArguments()["org"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("organization is required"))
 	}
-	query, ok := req.Params.Arguments["query"].(string)
+	query, ok := req.GetArguments()["query"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("query is required"))
 	}
-	includeDescription, _ := req.Params.Arguments["includeDescription"].(bool)
-	page, ok := req.Params.Arguments["page"].(float64)
+	includeDescription, _ := req.GetArguments()["includeDescription"].(bool)
+	page, ok := req.GetArguments()["page"].(float64)
 	if !ok {
 		page = 1
 	}
-	pageSize, ok := req.Params.Arguments["pageSize"].(float64)
+	pageSize, ok := req.GetArguments()["pageSize"].(float64)
 	if !ok {
 		pageSize = 100
 	}
@@ -137,22 +137,22 @@ func SearchOrgTeamsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallTo
 
 func SearchReposFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called SearchReposFn")
-	keyword, ok := req.Params.Arguments["keyword"].(string)
+	keyword, ok := req.GetArguments()["keyword"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("keyword is required"))
 	}
-	keywordIsTopic, _ := req.Params.Arguments["keywordIsTopic"].(bool)
-	keywordInDescription, _ := req.Params.Arguments["keywordInDescription"].(bool)
-	ownerID, _ := req.Params.Arguments["ownerID"].(float64)
-	isPrivate, _ := req.Params.Arguments["isPrivate"].(bool)
-	isArchived, _ := req.Params.Arguments["isArchived"].(bool)
-	sort, _ := req.Params.Arguments["sort"].(string)
-	order, _ := req.Params.Arguments["order"].(string)
-	page, ok := req.Params.Arguments["page"].(float64)
+	keywordIsTopic, _ := req.GetArguments()["keywordIsTopic"].(bool)
+	keywordInDescription, _ := req.GetArguments()["keywordInDescription"].(bool)
+	ownerID, _ := req.GetArguments()["ownerID"].(float64)
+	isPrivate, _ := req.GetArguments()["isPrivate"].(bool)
+	isArchived, _ := req.GetArguments()["isArchived"].(bool)
+	sort, _ := req.GetArguments()["sort"].(string)
+	order, _ := req.GetArguments()["order"].(string)
+	page, ok := req.GetArguments()["page"].(float64)
 	if !ok {
 		page = 1
 	}
-	pageSize, ok := req.Params.Arguments["pageSize"].(float64)
+	pageSize, ok := req.GetArguments()["pageSize"].(float64)
 	if !ok {
 		pageSize = 100
 	}

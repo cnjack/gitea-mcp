@@ -87,20 +87,20 @@ type ListTagResult struct {
 
 func CreateTagFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called CreateTagFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	tagName, ok := req.Params.Arguments["tag_name"].(string)
+	tagName, ok := req.GetArguments()["tag_name"].(string)
 	if !ok {
 		return nil, fmt.Errorf("tag_name is required")
 	}
-	target, _ := req.Params.Arguments["target"].(string)
-	message, _ := req.Params.Arguments["message"].(string)
+	target, _ := req.GetArguments()["target"].(string)
+	message, _ := req.GetArguments()["message"].(string)
 
 	_, _, err := gitea.Client().CreateTag(owner, repo, gitea_sdk.CreateTagOption{
 		TagName: tagName,
@@ -116,15 +116,15 @@ func CreateTagFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolRes
 
 func DeleteTagFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called DeleteTagFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	tagName, ok := req.Params.Arguments["tag_name"].(string)
+	tagName, ok := req.GetArguments()["tag_name"].(string)
 	if !ok {
 		return nil, fmt.Errorf("tag_name is required")
 	}
@@ -139,15 +139,15 @@ func DeleteTagFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolRes
 
 func GetTagFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called GetTagFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	tagName, ok := req.Params.Arguments["tag_name"].(string)
+	tagName, ok := req.GetArguments()["tag_name"].(string)
 	if !ok {
 		return nil, fmt.Errorf("tag_name is required")
 	}
@@ -162,16 +162,16 @@ func GetTagFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult
 
 func ListTagsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called ListTagsFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	page, _ := req.Params.Arguments["page"].(float64)
-	pageSize, _ := req.Params.Arguments["pageSize"].(float64)
+	page, _ := req.GetArguments()["page"].(float64)
+	pageSize, _ := req.GetArguments()["pageSize"].(float64)
 
 	tags, _, err := gitea.Client().ListRepoTags(owner, repo, gitea_sdk.ListRepoTagsOptions{
 		ListOptions: gitea_sdk.ListOptions{

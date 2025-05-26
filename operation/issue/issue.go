@@ -99,15 +99,15 @@ func init() {
 
 func GetIssueByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called GetIssueByIndexFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	index, ok := req.Params.Arguments["index"].(float64)
+	index, ok := req.GetArguments()["index"].(float64)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("index is required"))
 	}
@@ -121,23 +121,23 @@ func GetIssueByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallT
 
 func ListRepoIssuesFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called ListIssuesFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	state, ok := req.Params.Arguments["state"].(string)
+	state, ok := req.GetArguments()["state"].(string)
 	if !ok {
 		state = "all"
 	}
-	page, ok := req.Params.Arguments["page"].(float64)
+	page, ok := req.GetArguments()["page"].(float64)
 	if !ok {
 		page = 1
 	}
-	pageSize, ok := req.Params.Arguments["pageSize"].(float64)
+	pageSize, ok := req.GetArguments()["pageSize"].(float64)
 	if !ok {
 		pageSize = 100
 	}
@@ -157,19 +157,19 @@ func ListRepoIssuesFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallTo
 
 func CreateIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called CreateIssueFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	title, ok := req.Params.Arguments["title"].(string)
+	title, ok := req.GetArguments()["title"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("title is required"))
 	}
-	body, ok := req.Params.Arguments["body"].(string)
+	body, ok := req.GetArguments()["body"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("body is required"))
 	}
@@ -186,19 +186,19 @@ func CreateIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolR
 
 func CreateIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called CreateIssueCommentFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	index, ok := req.Params.Arguments["index"].(float64)
+	index, ok := req.GetArguments()["index"].(float64)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("index is required"))
 	}
-	body, ok := req.Params.Arguments["body"].(string)
+	body, ok := req.GetArguments()["body"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("body is required"))
 	}
@@ -215,38 +215,38 @@ func CreateIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.Ca
 
 func EditIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called EditIssueFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	index, ok := req.Params.Arguments["index"].(float64)
+	index, ok := req.GetArguments()["index"].(float64)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("index is required"))
 	}
 
 	opt := gitea_sdk.EditIssueOption{}
 
-	title, ok := req.Params.Arguments["title"].(string)
+	title, ok := req.GetArguments()["title"].(string)
 	if ok {
 		opt.Title = title
 	}
-	body, ok := req.Params.Arguments["body"].(string)
+	body, ok := req.GetArguments()["body"].(string)
 	if ok {
 		opt.Body = ptr.To(body)
 	}
-	assignees, ok := req.Params.Arguments["assignees"].([]string)
+	assignees, ok := req.GetArguments()["assignees"].([]string)
 	if ok {
 		opt.Assignees = assignees
 	}
-	milestone, ok := req.Params.Arguments["milestone"].(float64)
+	milestone, ok := req.GetArguments()["milestone"].(float64)
 	if ok {
 		opt.Milestone = ptr.To(int64(milestone))
 	}
-	state, ok := req.Params.Arguments["state"].(string)
+	state, ok := req.GetArguments()["state"].(string)
 	if ok {
 		opt.State = ptr.To(gitea_sdk.StateType(state))
 	}

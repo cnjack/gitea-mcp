@@ -109,28 +109,28 @@ type ListReleaseResult struct {
 
 func CreateReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called CreateReleasesFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	tagName, ok := req.Params.Arguments["tag_name"].(string)
+	tagName, ok := req.GetArguments()["tag_name"].(string)
 	if !ok {
 		return nil, fmt.Errorf("tag_name is required")
 	}
-	target, ok := req.Params.Arguments["target"].(string)
+	target, ok := req.GetArguments()["target"].(string)
 	if !ok {
 		return nil, fmt.Errorf("target is required")
 	}
-	title, ok := req.Params.Arguments["title"].(string)
+	title, ok := req.GetArguments()["title"].(string)
 	if !ok {
 		return nil, fmt.Errorf("title is required")
 	}
-	isDraft, _ := req.Params.Arguments["is_draft"].(bool)
-	isPreRelease, _ := req.Params.Arguments["is_pre_release"].(bool)
+	isDraft, _ := req.GetArguments()["is_draft"].(bool)
+	isPreRelease, _ := req.GetArguments()["is_pre_release"].(bool)
 
 	_, _, err := gitea.Client().CreateRelease(owner, repo, gitea_sdk.CreateReleaseOption{
 		TagName:      tagName,
@@ -148,15 +148,15 @@ func CreateReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToo
 
 func DeleteReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called DeleteReleaseFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	id, ok := req.Params.Arguments["id"].(float64)
+	id, ok := req.GetArguments()["id"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -171,15 +171,15 @@ func DeleteReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToo
 
 func GetReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called GetReleaseFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	id, ok := req.Params.Arguments["id"].(float64)
+	id, ok := req.GetArguments()["id"].(float64)
 	if !ok {
 		return nil, fmt.Errorf("id is required")
 	}
@@ -194,11 +194,11 @@ func GetReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolRe
 
 func GetLatestReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called GetLatestReleaseFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
@@ -213,18 +213,18 @@ func GetLatestReleaseFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.Call
 
 func ListReleasesFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called ListReleasesFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return nil, fmt.Errorf("owner is required")
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	isDraft, _ := req.Params.Arguments["is_draft"].(bool)
-	isPreRelease, _ := req.Params.Arguments["is_pre_release"].(bool)
-	page, _ := req.Params.Arguments["page"].(float64)
-	pageSize, _ := req.Params.Arguments["pageSize"].(float64)
+	isDraft, _ := req.GetArguments()["is_draft"].(bool)
+	isPreRelease, _ := req.GetArguments()["is_pre_release"].(bool)
+	page, _ := req.GetArguments()["page"].(float64)
+	pageSize, _ := req.GetArguments()["pageSize"].(float64)
 
 	releases, _, err := gitea.Client().ListReleases(owner, repo, gitea_sdk.ListReleasesOptions{
 		ListOptions: gitea_sdk.ListOptions{

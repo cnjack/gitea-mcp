@@ -17,17 +17,15 @@ const (
 	ListRepoCommitsToolName = "list_repo_commits"
 )
 
-var (
-	ListRepoCommitsTool = mcp.NewTool(
-		ListRepoCommitsToolName,
-		mcp.WithDescription("List repository commits"),
-		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
-		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
-		mcp.WithString("sha", mcp.Description("SHA or branch to start listing commits from")),
-		mcp.WithString("path", mcp.Description("path indicates that only commits that include the path's file/dir should be returned.")),
-		mcp.WithNumber("page", mcp.Required(), mcp.Description("page number"), mcp.DefaultNumber(1), mcp.Min(1)),
-		mcp.WithNumber("page_size", mcp.Required(), mcp.Description("page size"), mcp.DefaultNumber(50), mcp.Min(1)),
-	)
+var ListRepoCommitsTool = mcp.NewTool(
+	ListRepoCommitsToolName,
+	mcp.WithDescription("List repository commits"),
+	mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+	mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+	mcp.WithString("sha", mcp.Description("SHA or branch to start listing commits from")),
+	mcp.WithString("path", mcp.Description("path indicates that only commits that include the path's file/dir should be returned.")),
+	mcp.WithNumber("page", mcp.Required(), mcp.Description("page number"), mcp.DefaultNumber(1), mcp.Min(1)),
+	mcp.WithNumber("page_size", mcp.Required(), mcp.Description("page size"), mcp.DefaultNumber(50), mcp.Min(1)),
 )
 
 func init() {
@@ -39,24 +37,24 @@ func init() {
 
 func ListRepoCommitsFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called ListRepoCommitsFn")
-	owner, ok := req.Params.Arguments["owner"].(string)
+	owner, ok := req.GetArguments()["owner"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("owner is required"))
 	}
-	repo, ok := req.Params.Arguments["repo"].(string)
+	repo, ok := req.GetArguments()["repo"].(string)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("repo is required"))
 	}
-	page, ok := req.Params.Arguments["page"].(float64)
+	page, ok := req.GetArguments()["page"].(float64)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("page is required"))
 	}
-	pageSize, ok := req.Params.Arguments["page_size"].(float64)
+	pageSize, ok := req.GetArguments()["page_size"].(float64)
 	if !ok {
 		return to.ErrorResult(fmt.Errorf("page_size is required"))
 	}
-	sha, _ := req.Params.Arguments["sha"].(string)
-	path, _ := req.Params.Arguments["path"].(string)
+	sha, _ := req.GetArguments()["sha"].(string)
+	path, _ := req.GetArguments()["path"].(string)
 	opt := gitea_sdk.ListCommitOptions{
 		ListOptions: gitea_sdk.ListOptions{
 			Page:     int(page),
