@@ -144,24 +144,26 @@ cp gitea-mcp /usr/local/bin/
 ## ✅ 可用工具
 
 Gitea MCP 伺服器支持以下工具：
+
 |             工具             |   範圍   |             描述             |
 | :--------------------------: | :------: | :--------------------------: |
 |       get_my_user_info       |   用戶   |     獲取已認證用戶的信息     |
+|        get_user_orgs         |   用戶   |    取得已認證用戶所屬組織    |
 |         create_repo          |   倉庫   |        創建一個新倉庫        |
 |          fork_repo           |   倉庫   |         復刻一個倉庫         |
 |        list_my_repos         |   倉庫   | 列出已認證用戶擁有的所有倉庫 |
 |        create_branch         |   分支   |        創建一個新分支        |
 |        delete_branch         |   分支   |         刪除一個分支         |
 |        list_branches         |   分支   |     列出倉庫中的所有分支     |
-|        create_release        | 版本發布 |        創建一個新版本發布    |
-|        delete_release        | 版本發布 |        刪除一個版本發布      |
-|         get_release          | 版本發布 |        獲取一個版本發布      |
+|        create_release        | 版本發布 |      創建一個新版本發布      |
+|        delete_release        | 版本發布 |       刪除一個版本發布       |
+|         get_release          | 版本發布 |       獲取一個版本發布       |
 |      get_latest_release      | 版本發布 |      獲取最新的版本發布      |
 |        list_releases         | 版本發布 |       列出所有版本發布       |
 |          create_tag          |   標籤   |        創建一個新標籤        |
 |          delete_tag          |   標籤   |         刪除一個標籤         |
 |           get_tag            |   標籤   |         獲取一個標籤         |
-|          list_tags           |   標籤   |       列出所有標籤           |
+|          list_tags           |   標籤   |         列出所有標籤         |
 |      list_repo_commits       |   提交   |     列出倉庫中的所有提交     |
 |       get_file_content       |   文件   |    獲取文件的內容和元數據    |
 |         create_file          |   文件   |        創建一個新文件        |
@@ -171,7 +173,7 @@ Gitea MCP 伺服器支持以下工具：
 |       list_repo_issues       |   問題   |     列出倉庫中的所有問題     |
 |         create_issue         |   問題   |        創建一個新問題        |
 |     create_issue_comment     |   問題   |       在問題上創建評論       |
-|          edit_issue          |   問題   |         編輯一個問題        |
+|          edit_issue          |   問題   |         編輯一個問題         |
 |  get_pull_request_by_index   | 拉取請求 |     根據索引獲取拉取請求     |
 |   list_repo_pull_requests    | 拉取請求 |   列出倉庫中的所有拉取請求   |
 |     create_pull_request      | 拉取請求 |      創建一個新拉取請求      |
