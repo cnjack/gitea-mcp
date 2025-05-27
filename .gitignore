@@ -1,7 +1,4 @@
 .idea
-.vscode
-
 gitea-mcp
 gitea-mcp.exe
-
 *.log
