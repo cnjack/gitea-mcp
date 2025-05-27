@@ -6,6 +6,22 @@
 
 [![在 VS Code 中使用 Docker 安装](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gitea&inputs=[{%22id%22:%22gitea_token%22,%22type%22:%22promptString%22,%22description%22:%22Gitea%20Personal%20Access%20Token%22,%22password%22:true}]&config={%22command%22:%22docker%22,%22args%22:[%22run%22,%22-i%22,%22--rm%22,%22-e%22,%22GITEA_ACCESS_TOKEN%22,%22docker.gitea.com/gitea-mcp-server%22],%22env%22:{%22GITEA_ACCESS_TOKEN%22:%22${input:gitea_token}%22}}) [![在 VS Code Insiders 中使用 Docker 安装](https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gitea&inputs=[{%22id%22:%22gitea_token%22,%22type%22:%22promptString%22,%22description%22:%22Gitea%20Personal%20Access%20Token%22,%22password%22:true}]&config={%22command%22:%22docker%22,%22args%22:[%22run%22,%22-i%22,%22--rm%22,%22-e%22,%22GITEA_ACCESS_TOKEN%22,%22docker.gitea.com/gitea-mcp-server%22],%22env%22:{%22GITEA_ACCESS_TOKEN%22:%22${input:gitea_token}%22}}&quality=insiders)
 
+## 目录
+
+- [Gitea MCP 服务器](#gitea-mcp-服务器)
+  - [目录](#目录)
+  - [什么是 Gitea？](#什么是-gitea)
+  - [什么是 MCP？](#什么是-mcp)
+  - [🚧 安装](#-安装)
+    - [在 VS Code 中使用](#在-vs-code-中使用)
+    - [📥 下载官方 Gitea MCP 二进制版本](#-下载官方-gitea-mcp-二进制版本)
+    - [🔧 从源代码构建](#-从源代码构建)
+    - [📁 添加到 PATH](#-添加到-path)
+  - [🚀 使用](#-使用)
+  - [✅ 可用工具](#-可用工具)
+  - [🐛 调试](#-调试)
+  - [🛠 疑难排解](#-疑难排解)
+
 ## 什么是 Gitea？
 
 Gitea 是一个由社区管理的轻量级代码托管解决方案，使用 Go 语言编写。它以 MIT 许可证发布。Gitea 提供 Git 托管，包括仓库查看器、问题追踪、拉取请求等功能。

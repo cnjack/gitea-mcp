@@ -6,6 +6,22 @@
 
 [![Install with Docker in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gitea&inputs=[{%22id%22:%22gitea_token%22,%22type%22:%22promptString%22,%22description%22:%22Gitea%20Personal%20Access%20Token%22,%22password%22:true}]&config={%22command%22:%22docker%22,%22args%22:[%22run%22,%22-i%22,%22--rm%22,%22-e%22,%22GITEA_ACCESS_TOKEN%22,%22docker.gitea.com/gitea-mcp-server%22],%22env%22:{%22GITEA_ACCESS_TOKEN%22:%22${input:gitea_token}%22}}) [![Install with Docker in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=gitea&inputs=[{%22id%22:%22gitea_token%22,%22type%22:%22promptString%22,%22description%22:%22Gitea%20Personal%20Access%20Token%22,%22password%22:true}]&config={%22command%22:%22docker%22,%22args%22:[%22run%22,%22-i%22,%22--rm%22,%22-e%22,%22GITEA_ACCESS_TOKEN%22,%22docker.gitea.com/gitea-mcp-server%22],%22env%22:{%22GITEA_ACCESS_TOKEN%22:%22${input:gitea_token}%22}}&quality=insiders)
 
+## Table of Contents
+
+- [Gitea MCP Server](#gitea-mcp-server)
+  - [Table of Contents](#table-of-contents)
+  - [What is Gitea?](#what-is-gitea)
+  - [What is MCP?](#what-is-mcp)
+  - [🚧 Installation](#-installation)
+    - [Usage with VS Code](#usage-with-vs-code)
+    - [📥 Download the official binary release](#-download-the-official-binary-release)
+    - [🔧 Build from Source](#-build-from-source)
+    - [📁 Add to PATH](#-add-to-path)
+  - [🚀 Usage](#-usage)
+  - [✅ Available Tools](#-available-tools)
+  - [🐛 Debugging](#-debugging)
+  - [🛠 Troubleshooting](#-troubleshooting)
+
 ## What is Gitea?
 
 Gitea is a community-managed lightweight code hosting solution written in Go. It is published under the MIT license. Gitea provides Git hosting including a repository viewer, issue tracking, pull requests, and more.
