@@ -22,19 +22,20 @@ func Client() *gitea.Client {
 		if client != nil {
 			return
 		}
+
+		httpClient := &http.Client{
+			Transport: http.DefaultTransport,
+		}
+
 		opts := []gitea.ClientOption{
 			gitea.SetToken(flag.Token),
 		}
 		if flag.Insecure {
-			httpClient := &http.Client{
-				Transport: &http.Transport{
-					TLSClientConfig: &tls.Config{
-						InsecureSkipVerify: true,
-					},
-				},
+			httpClient.Transport.(*http.Transport).TLSClientConfig = &tls.Config{
+				InsecureSkipVerify: true,
 			}
-			opts = append(opts, gitea.SetHTTPClient(httpClient))
 		}
+		opts = append(opts, gitea.SetHTTPClient(httpClient))
 		if flag.Debug {
 			opts = append(opts, gitea.SetDebugMode())
 		}
