@@ -59,7 +59,7 @@ Optionally, you can add it to a file called `.vscode/mcp.json` in your workspace
 
 ### 📥 Download the official binary release
 
-You can download the official release from [here](https://gitea.com/gitea/gitea-mcp/releases).
+You can download the official release from [official Gitea MCP binary releases](https://gitea.com/gitea/gitea-mcp/releases).
 
 ### 🔧 Build from Source
 
@@ -129,6 +129,18 @@ To configure the MCP server for Gitea, add the following to your MCP configurati
 }
 ```
 
+- **http mode**
+
+```json
+{
+  "mcpServers": {
+    "gitea": {
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
 **Default log path**: `$HOME/.gitea-mcp/gitea-mcp.log`
 
 > [!NOTE]
@@ -145,42 +157,42 @@ list all my repositories
 
 The Gitea MCP Server supports the following tools:
 
-|             Tool             |    Scope     |                      Description                      |
-| :--------------------------: | :----------: | :---------------------------------------------------: |
-|       get_my_user_info       |     User     |     Get the information of the authenticated user     |
-|       get_user_orgs       |     User     |     Get organizations associated with the authenticated user     |
-|         create_repo          |  Repository  |                Create a new repository                |
-|          fork_repo           |  Repository  |                   Fork a repository                   |
-|        list_my_repos         |  Repository  | List all repositories owned by the authenticated user |
-|        create_branch         |    Branch    |                  Create a new branch                  |
-|        delete_branch         |    Branch    |                    Delete a branch                    |
-|        list_branches         |    Branch    |           List all branches in a repository           |
-|        create_release        |    Release   |           Create a new release in a repository        |
-|        delete_release        |    Release   |           Delete a release from a repository          |
-|        get_release           |    Release   |                     Get a release                     |
-|      get_latest_release      |    Release   |         Get the latest release in a repository        |
-|        list_releases         |    Release   |           List all releases in a repository           |
-|          create_tag          |     Tag      |                   Create a new tag                    |
-|          delete_tag          |     Tag      |                     Delete a tag                      |
-|           get_tag            |     Tag      |                      Get a tag                        |
-|          list_tags           |     Tag      |               List all tags in a repository           |
-|      list_repo_commits       |    Commit    |           List all commits in a repository            |
-|       get_file_content       |     File     |        Get the content and metadata of a file         |
-|         create_file          |     File     |                   Create a new file                   |
-|         update_file          |     File     |                Update an existing file                |
-|         delete_file          |     File     |                     Delete a file                     |
-|      get_issue_by_index      |    Issue     |               Get an issue by its index               |
-|       list_repo_issues       |    Issue     |            List all issues in a repository            |
-|         create_issue         |    Issue     |                  Create a new issue                   |
-|     create_issue_comment     |    Issue     |             Create a comment on an issue              |
-|          edit_issue          |    Issue     |                      Edit a issue                     |
-|  get_pull_request_by_index   | Pull Request |            Get a pull request by its index            |
-|   list_repo_pull_requests    | Pull Request |        List all pull requests in a repository         |
-|     create_pull_request      | Pull Request |               Create a new pull request               |
-|         search_users         |     User     |                   Search for users                    |
-|       search_org_teams       | Organization |          Search for teams in an organization          |
-|         search_repos         |  Repository  |                Search for repositories                |
-| get_gitea_mcp_server_version |    Server    |        Get the version of the Gitea MCP Server        |
+|             Tool             |    Scope     |                       Description                        |
+| :--------------------------: | :----------: | :------------------------------------------------------: |
+|       get_my_user_info       |     User     |      Get the information of the authenticated user       |
+|        get_user_orgs         |     User     | Get organizations associated with the authenticated user |
+|         create_repo          |  Repository  |                 Create a new repository                  |
+|          fork_repo           |  Repository  |                    Fork a repository                     |
+|        list_my_repos         |  Repository  |  List all repositories owned by the authenticated user   |
+|        create_branch         |    Branch    |                   Create a new branch                    |
+|        delete_branch         |    Branch    |                     Delete a branch                      |
+|        list_branches         |    Branch    |            List all branches in a repository             |
+|        create_release        |   Release    |           Create a new release in a repository           |
+|        delete_release        |   Release    |            Delete a release from a repository            |
+|         get_release          |   Release    |                      Get a release                       |
+|      get_latest_release      |   Release    |          Get the latest release in a repository          |
+|        list_releases         |   Release    |            List all releases in a repository             |
+|          create_tag          |     Tag      |                     Create a new tag                     |
+|          delete_tag          |     Tag      |                       Delete a tag                       |
+|           get_tag            |     Tag      |                        Get a tag                         |
+|          list_tags           |     Tag      |              List all tags in a repository               |
+|      list_repo_commits       |    Commit    |             List all commits in a repository             |
+|       get_file_content       |     File     |          Get the content and metadata of a file          |
+|         create_file          |     File     |                    Create a new file                     |
+|         update_file          |     File     |                 Update an existing file                  |
+|         delete_file          |     File     |                      Delete a file                       |
+|      get_issue_by_index      |    Issue     |                Get an issue by its index                 |
+|       list_repo_issues       |    Issue     |             List all issues in a repository              |
+|         create_issue         |    Issue     |                    Create a new issue                    |
+|     create_issue_comment     |    Issue     |               Create a comment on an issue               |
+|          edit_issue          |    Issue     |                       Edit a issue                       |
+|  get_pull_request_by_index   | Pull Request |             Get a pull request by its index              |
+|   list_repo_pull_requests    | Pull Request |          List all pull requests in a repository          |
+|     create_pull_request      | Pull Request |                Create a new pull request                 |
+|         search_users         |     User     |                     Search for users                     |
+|       search_org_teams       | Organization |           Search for teams in an organization            |
+|         search_repos         |  Repository  |                 Search for repositories                  |
+| get_gitea_mcp_server_version |    Server    |         Get the version of the Gitea MCP Server          |
 
 ## 🐛 Debugging
 

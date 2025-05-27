@@ -15,9 +15,7 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
-var (
-	mcpServer *server.MCPServer
-)
+var mcpServer *server.MCPServer
 
 func RegisterTool(s *server.MCPServer) {
 	// User Tool
@@ -55,8 +53,14 @@ func Run() error {
 		if err := sseServer.Start(fmt.Sprintf(":%d", flag.Port)); err != nil {
 			return err
 		}
+	case "http":
+		httpServer := server.NewStreamableHTTPServer(mcpServer)
+		log.Infof("Gitea MCP HTTP server listening on :%d", flag.Port)
+		if err := httpServer.Start(fmt.Sprintf(":%d", flag.Port)); err != nil {
+			return err
+		}
 	default:
-		return fmt.Errorf("invalid transport type: %s. Must be 'stdio' or 'sse'", flag.Mode)
+		return fmt.Errorf("invalid transport type: %s. Must be 'stdio', 'sse' or 'http'", flag.Mode)
 	}
 	return nil
 }

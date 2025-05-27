@@ -39,7 +39,7 @@ func Default() *zap.Logger {
 				MaxAge:     30,
 			}))
 
-			if flag.Mode == "sse" {
+			if flag.Mode == "http" || flag.Mode == "sse" {
 				wss = append(wss, zapcore.AddSync(os.Stdout))
 			}
 

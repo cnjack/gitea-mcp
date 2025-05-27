@@ -57,9 +57,9 @@ Model Context Protocol (MCP) 是一種協議，允許通過聊天界面整合各
 }
 ```
 
-### 📥 下載官方二進制版本
+### 📥 下載官方 Gitea MCP 二進位版本
 
-您可以從[這裡](https://gitea.com/gitea/gitea-mcp/releases)下載官方版本。
+您可以從[官方 Gitea MCP 二進位版本](https://gitea.com/gitea/gitea-mcp/releases)下載官方版本。
 
 ### 🔧 從源代碼構建
 
@@ -129,11 +129,23 @@ cp gitea-mcp /usr/local/bin/
 }
 ```
 
-**默認日誌路徑**: `$HOME/.gitea-mcp/gitea-mcp.log`
+- **http 模式**
+
+```json
+{
+  "mcpServers": {
+    "gitea": {
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
+**預設日誌路徑**: `$HOME/.gitea-mcp/gitea-mcp.log`
 
 > [!注意]
-> 您可以通過命令行參數或環境變量提供您的 Gitea 主機和訪問令牌。
-> 命令行參數具有最高優先級
+> 您可以通過命令列參數或環境變數提供您的 Gitea 主機和訪問令牌。
+> 命令列參數具有最高優先權
 
 一切設置完成後，請嘗試在您的 MCP 兼容聊天框中輸入以下內容：
 
@@ -180,11 +192,11 @@ Gitea MCP 伺服器支持以下工具：
 |         search_users         |   用戶   |           搜索用戶           |
 |       search_org_teams       |   組織   |       搜索組織中的團隊       |
 |         search_repos         |   倉庫   |           搜索倉庫           |
-| get_gitea_mcp_server_version |  伺服器  | 獲取 Gitea MCP 伺服器的版本  |
+| get_gitea_mcp_server_version |   伺服器    |        獲取 Gitea MCP 伺服器的版本         |
 
 ## 🐛 調試
 
-要啟用調試模式，請在使用 sse 模式運行 Gitea MCP 伺服器時添加 `-d` 標誌：
+要啟用調試模式，請在使用 sse 模式運行 Gitea MCP 伺服器時添加 `-d` 旗標：
 
 ```sh
 ./gitea-mcp -t sse [--port 8080] --token <your personal access token> -d

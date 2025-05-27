@@ -57,9 +57,9 @@ Model Context Protocol (MCP) 是一种协议，允许通过聊天界面整合各
 }
 ```
 
-### 📥 下载官方二进制版本
+### 📥 下载官方 Gitea MCP 二进制版本
 
-您可以从[这里](https://gitea.com/gitea/gitea-mcp/releases)下载官方版本。
+您可以从[官方 Gitea MCP 二进制版本](https://gitea.com/gitea/gitea-mcp/releases)下载官方版本。
 
 ### 🔧 从源代码构建
 
@@ -129,6 +129,18 @@ cp gitea-mcp /usr/local/bin/
 }
 ```
 
+- **http 模式**
+
+```json
+{
+  "mcpServers": {
+    "gitea": {
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
 **默认日志路径**: `$HOME/.gitea-mcp/gitea-mcp.log`
 
 > [!注意]
@@ -180,7 +192,7 @@ Gitea MCP 服务器支持以下工具：
 |         search_users         |   用户   |           搜索用户           |
 |       search_org_teams       |   组织   |       搜索组织中的团队       |
 |         search_repos         |   仓库   |           搜索仓库           |
-| get_gitea_mcp_server_version |  服务器  | 获取 Gitea MCP 服务器的版本  |
+| get_gitea_mcp_server_version |   服务器    |        获取 Gitea MCP 服务器的版本         |
 
 ## 🐛 调试
 
