@@ -221,8 +221,16 @@ func ListReleasesFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallTool
 	if !ok {
 		return nil, fmt.Errorf("repo is required")
 	}
-	isDraft, _ := req.GetArguments()["is_draft"].(bool)
-	isPreRelease, _ := req.GetArguments()["is_pre_release"].(bool)
+	var pIsDraft *bool
+	isDraft, ok := req.GetArguments()["is_draft"].(bool)
+	if ok {
+		pIsDraft = ptr.To(isDraft)
+	}
+	var pIsPreRelease *bool
+	isPreRelease, ok := req.GetArguments()["is_pre_release"].(bool)
+	if ok {
+		pIsPreRelease = ptr.To(isPreRelease)
+	}
 	page, _ := req.GetArguments()["page"].(float64)
 	pageSize, _ := req.GetArguments()["pageSize"].(float64)
 
@@ -231,8 +239,8 @@ func ListReleasesFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallTool
 			Page:     int(page),
 			PageSize: int(pageSize),
 		},
-		IsDraft:      ptr.To(isDraft),
-		IsPreRelease: ptr.To(isPreRelease),
+		IsDraft:      pIsDraft,
+		IsPreRelease: pIsPreRelease,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("list releases error: %v", err)

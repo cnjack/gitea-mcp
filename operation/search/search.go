@@ -144,8 +144,16 @@ func SearchReposFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolR
 	keywordIsTopic, _ := req.GetArguments()["keywordIsTopic"].(bool)
 	keywordInDescription, _ := req.GetArguments()["keywordInDescription"].(bool)
 	ownerID, _ := req.GetArguments()["ownerID"].(float64)
-	isPrivate, _ := req.GetArguments()["isPrivate"].(bool)
-	isArchived, _ := req.GetArguments()["isArchived"].(bool)
+	var pIsPrivate *bool
+	isPrivate, ok := req.GetArguments()["isPrivate"].(bool)
+	if ok {
+		pIsPrivate = ptr.To(isPrivate)
+	}
+	var pIsArchived *bool
+	isArchived, ok := req.GetArguments()["isArchived"].(bool)
+	if ok {
+		pIsArchived = ptr.To(isArchived)
+	}
 	sort, _ := req.GetArguments()["sort"].(string)
 	order, _ := req.GetArguments()["order"].(string)
 	page, ok := req.GetArguments()["page"].(float64)
@@ -161,8 +169,8 @@ func SearchReposFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolR
 		KeywordIsTopic:       keywordIsTopic,
 		KeywordInDescription: keywordInDescription,
 		OwnerID:              int64(ownerID),
-		IsPrivate:            ptr.To(isPrivate),
-		IsArchived:           ptr.To(isArchived),
+		IsPrivate:            pIsPrivate,
+		IsArchived:           pIsArchived,
 		Sort:                 sort,
 		Order:                order,
 		ListOptions: gitea_sdk.ListOptions{
