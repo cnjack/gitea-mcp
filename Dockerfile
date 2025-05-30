@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     go build -trimpath -ldflags="-s -w -X main.Version=${VERSION}" -o gitea-mcp
 
 # Final stage
-FROM gcr.io/distroless/static-debian11:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot
 
 ENV GITEA_MODE=stdio
 
