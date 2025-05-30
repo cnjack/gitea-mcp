@@ -29,10 +29,6 @@ COPY --from=builder --chown=nonroot:nonroot /app/gitea-mcp .
 
 USER nonroot:nonroot
 
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD ["/app/gitea-mcp", "healthcheck"]
-
-LABEL org.opencontainers.image.authors="your-team@example.com"
 LABEL org.opencontainers.image.version="${VERSION}"
 
 CMD ["/app/gitea-mcp"]
