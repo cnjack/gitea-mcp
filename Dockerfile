@@ -1,39 +1,38 @@
+# syntax=docker/dockerfile:1.4
+
 # Build stage
-FROM golang:1.24-bullseye AS builder
+FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS builder
 
-ARG VERSION
+ARG VERSION=dev
+ARG TARGETOS
+ARG TARGETARCH
 
-# Set the working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum files
 COPY go.mod go.sum ./
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
 
-# Download dependencies
-RUN go mod download
-
-# Copy the source code
 COPY . .
-
-RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${VERSION}" -o gitea-mcp
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64} \
+    go build -trimpath -ldflags="-s -w -X main.Version=${VERSION}" -o gitea-mcp
 
 # Final stage
-FROM debian:bullseye-slim
+FROM gcr.io/distroless/static-debian11:nonroot
 
 ENV GITEA_MODE=stdio
 
 WORKDIR /app
+COPY --from=builder --chown=nonroot:nonroot /app/gitea-mcp .
 
-# Install ca-certificates for HTTPS requests
-RUN apt-get update && \
-    apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+USER nonroot:nonroot
 
-# Create a non-root user
-RUN useradd -r -u 1000 -m gitea-mcp
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD ["/app/gitea-mcp", "healthcheck"]
 
-COPY --from=builder --chown=1000:1000 /app/gitea-mcp .
-
-# Use the non-root user
-USER gitea-mcp
+LABEL org.opencontainers.image.authors="your-team@example.com"
+LABEL org.opencontainers.image.version="${VERSION}"
 
 CMD ["/app/gitea-mcp"]
