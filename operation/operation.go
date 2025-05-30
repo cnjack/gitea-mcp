@@ -71,5 +71,6 @@ func newMCPServer(version string) *server.MCPServer {
 		version,
 		server.WithToolCapabilities(true),
 		server.WithLogging(),
+		server.WithRecovery(),
 	)
 }
