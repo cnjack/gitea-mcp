@@ -16,6 +16,7 @@ import (
 
 const (
 	GetFileToolName    = "get_file_content"
+	GetDirToolName     = "get_dir_content"
 	CreateFileToolName = "create_file"
 	UpdateFileToolName = "update_file"
 	DeleteFileToolName = "delete_file"
@@ -29,6 +30,15 @@ var (
 		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
 		mcp.WithString("ref", mcp.Required(), mcp.Description("ref can be branch/tag/commit")),
 		mcp.WithString("filePath", mcp.Required(), mcp.Description("file path")),
+	)
+
+	GetDirContentTool = mcp.NewTool(
+		GetDirToolName,
+		mcp.WithDescription("Get a list of entries in a directory"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithString("ref", mcp.Required(), mcp.Description("ref can be branch/tag/commit")),
+		mcp.WithString("filePath", mcp.Required(), mcp.Description("directory path")),
 	)
 
 	CreateFileTool = mcp.NewTool(
@@ -72,6 +82,10 @@ func init() {
 		Tool:    GetFileContentTool,
 		Handler: GetFileContentFn,
 	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool:    GetDirContentTool,
+		Handler: GetDirContentFn,
+	})
 	Tool.RegisterWrite(server.ServerTool{
 		Tool:    CreateFileTool,
 		Handler: CreateFileFn,
@@ -104,6 +118,28 @@ func GetFileContentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallTo
 	content, _, err := gitea.Client().GetContents(owner, repo, ref, filePath)
 	if err != nil {
 		return to.ErrorResult(fmt.Errorf("get file err: %v", err))
+	}
+	return to.TextResult(content)
+}
+
+func GetDirContentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called GetDirContentFn")
+	owner, ok := req.GetArguments()["owner"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("owner is required"))
+	}
+	repo, ok := req.GetArguments()["repo"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("repo is required"))
+	}
+	ref, _ := req.GetArguments()["ref"].(string)
+	filePath, ok := req.GetArguments()["filePath"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("filePath is required"))
+	}
+	content, _, err := gitea.Client().ListContents(owner, repo, ref, filePath)
+	if err != nil {
+		return to.ErrorResult(fmt.Errorf("get dir content err: %v", err))
 	}
 	return to.TextResult(content)
 }

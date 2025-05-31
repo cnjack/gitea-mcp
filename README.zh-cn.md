@@ -194,6 +194,7 @@ Gitea MCP 服务器支持以下工具：
 |          list_tags           |   标签   |         列出所有标签         |
 |      list_repo_commits       |   提交   |     列出仓库中的所有提交     |
 |       get_file_content       |   文件   |    获取文件的内容和元数据    |
+|        get_dir_content       |   文件   |      获取目录的内容列表      |
 |         create_file          |   文件   |        创建一个新文件        |
 |         update_file          |   文件   |         更新现有文件         |
 |         delete_file          |   文件   |         删除一个文件         |

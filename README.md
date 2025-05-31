@@ -194,6 +194,7 @@ The Gitea MCP Server supports the following tools:
 |          list_tags           |     Tag      |              List all tags in a repository               |
 |      list_repo_commits       |    Commit    |             List all commits in a repository             |
 |       get_file_content       |     File     |          Get the content and metadata of a file          |
+|        get_dir_content       |     File     |           Get a list of entries in a directory           |
 |         create_file          |     File     |                    Create a new file                     |
 |         update_file          |     File     |                 Update an existing file                  |
 |         delete_file          |     File     |                      Delete a file                       |
