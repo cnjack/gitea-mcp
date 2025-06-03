@@ -203,6 +203,8 @@ The Gitea MCP Server supports the following tools:
 |         create_issue         |    Issue     |                    Create a new issue                    |
 |     create_issue_comment     |    Issue     |               Create a comment on an issue               |
 |          edit_issue          |    Issue     |                       Edit a issue                       |
+|      edit_issue_comment      |    Issue     |                Edit a comment on an issue                |
+| get_issue_comments_by_index  |    Issue     |          Get comments of an issue by its index           |
 |  get_pull_request_by_index   | Pull Request |             Get a pull request by its index              |
 |   list_repo_pull_requests    | Pull Request |          List all pull requests in a repository          |
 |     create_pull_request      | Pull Request |                Create a new pull request                 |

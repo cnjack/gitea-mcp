@@ -23,6 +23,9 @@ const (
 	CreateIssueToolName        = "create_issue"
 	CreateIssueCommentToolName = "create_issue_comment"
 	EditIssueToolName          = "edit_issue"
+	EditIssueCommentToolName   = "edit_issue_comment"
+	GetIssueCommentsByIndexToolName    = "get_issue_comments_by_index"
+
 )
 
 var (
@@ -52,6 +55,7 @@ var (
 		mcp.WithString("title", mcp.Required(), mcp.Description("issue title")),
 		mcp.WithString("body", mcp.Required(), mcp.Description("issue body")),
 	)
+	
 	CreateIssueCommentTool = mcp.NewTool(
 		CreateIssueCommentToolName,
 		mcp.WithDescription("create issue comment"),
@@ -60,6 +64,7 @@ var (
 		mcp.WithNumber("index", mcp.Required(), mcp.Description("repository issue index")),
 		mcp.WithString("body", mcp.Required(), mcp.Description("issue comment body")),
 	)
+	
 	EditIssueTool = mcp.NewTool(
 		EditIssueToolName,
 		mcp.WithDescription("edit issue"),
@@ -71,6 +76,23 @@ var (
 		mcp.WithArray("assignees", mcp.Description("usernames to assign to this issue"), mcp.Items(map[string]interface{}{"type": "string"})),
 		mcp.WithNumber("milestone", mcp.Description("milestone number")),
 		mcp.WithString("state", mcp.Description("issue state, one of open, closed, all")),
+	)
+	
+	EditIssueCommentTool = mcp.NewTool(
+		EditIssueCommentToolName,
+		mcp.WithDescription("edit issue comment"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithNumber("commentID", mcp.Required(), mcp.Description("id of issue comment")),
+		mcp.WithString("body", mcp.Required(), mcp.Description("issue comment body")),
+	)
+
+	GetIssueCommentsByIndexTool = mcp.NewTool(
+		GetIssueCommentsByIndexToolName,
+		mcp.WithDescription("get issue comment by index"),
+		mcp.WithString("owner", mcp.Required(), mcp.Description("repository owner")),
+		mcp.WithString("repo", mcp.Required(), mcp.Description("repository name")),
+		mcp.WithNumber("index", mcp.Required(), mcp.Description("repository issue index")),
 	)
 )
 
@@ -94,6 +116,14 @@ func init() {
 	Tool.RegisterWrite(server.ServerTool{
 		Tool:    EditIssueTool,
 		Handler: EditIssueFn,
+	})
+	Tool.RegisterWrite(server.ServerTool{
+		Tool: 	 EditIssueCommentTool,
+		Handler: EditIssueCommentFn,
+	})
+	Tool.RegisterRead(server.ServerTool{
+		Tool: 	 GetIssueCommentsByIndexTool,
+		Handler: GetIssueCommentsByIndexFn,
 	})
 }
 
@@ -254,6 +284,60 @@ func EditIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolRes
 	issue, _, err := gitea.Client().EditIssue(owner, repo, int64(index), opt)
 	if err != nil {
 		return to.ErrorResult(fmt.Errorf("edit %v/%v/issue/%v err: %v", owner, repo, int64(index), err))
+	}
+
+	return to.TextResult(issue)
+}
+
+
+func EditIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called EditIssueCommentFn")
+	owner, ok := req.GetArguments()["owner"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("owner is required"))
+	}
+	repo, ok := req.GetArguments()["repo"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("repo is required"))
+	}
+	commentID, ok := req.GetArguments()["commentID"].(float64)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("comment ID is required"))
+	}
+	body, ok := req.GetArguments()["body"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("body is required"))
+	}
+	opt := gitea_sdk.EditIssueCommentOption{
+		Body: body,
+	}
+	issueComment, _, err := gitea.Client().EditIssueComment(owner, repo, int64(commentID), opt)
+	if err != nil {
+		return to.ErrorResult(fmt.Errorf("edit %v/%v/issues/comments/%v err: %v", owner, repo, int64(commentID), err))
+	}
+
+	return to.TextResult(issueComment)
+
+}
+
+func GetIssueCommentsByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	log.Debugf("Called GetIssueCommentsByIndexFn")
+	owner, ok := req.GetArguments()["owner"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("owner is required"))
+	}
+	repo, ok := req.GetArguments()["repo"].(string)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("repo is required"))
+	}
+	index, ok := req.GetArguments()["index"].(float64)
+	if !ok {
+		return to.ErrorResult(fmt.Errorf("index is required"))
+	}
+	opt := gitea_sdk.ListIssueCommentOptions{}
+	issue, _, err := gitea.Client().ListIssueComments(owner, repo, int64(index), opt)
+	if err != nil {
+		return to.ErrorResult(fmt.Errorf("get %v/%v/issues/%v/comments err: %v", owner, repo, int64(index), err))
 	}
 
 	return to.TextResult(issue)
