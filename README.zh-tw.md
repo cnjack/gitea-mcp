@@ -54,7 +54,7 @@ Model Context Protocol (MCP) 是一種協議，允許通過聊天界面整合各
       }
     ],
     "servers": {
-      "github": {
+      "gitea-mcp": {
         "command": "docker",
         "args": [
           "run",

@@ -54,7 +54,7 @@ Optionally, you can add it to a file called `.vscode/mcp.json` in your workspace
       }
     ],
     "servers": {
-      "github": {
+      "gitea-mcp": {
         "command": "docker",
         "args": [
           "run",
