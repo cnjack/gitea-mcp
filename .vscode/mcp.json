@@ -21,15 +21,19 @@
     }
   ],
   "servers": {
-    "gitea": {
+    "gitea-mcp-stdio": {
       "type": "stdio",
       "command": "gitea-mcp",
       "args": ["-t", "stdio"],
-      "env": {
-        "GITEA_HOST": "${input:gitea-host}",
-        "GITEA_ACCESS_TOKEN": "${input:gitea-token}",
-        "GITEA_INSECURE": "${input:gitea-insecure}"
-      }
+          "env": {
+            "GITEA_HOST": "${input:gitea-host}",
+            "GITEA_ACCESS_TOKEN": "${input:gitea-token}",
+            "GITEA_INSECURE": "${input:gitea-insecure}"
+          }
+    },
+    "gitea-mcp-http": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp",
     }
   }
 }
