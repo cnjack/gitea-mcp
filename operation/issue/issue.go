@@ -18,14 +18,13 @@ import (
 var Tool = tool.New()
 
 const (
-	GetIssueByIndexToolName    = "get_issue_by_index"
-	ListRepoIssuesToolName     = "list_repo_issues"
-	CreateIssueToolName        = "create_issue"
-	CreateIssueCommentToolName = "create_issue_comment"
-	EditIssueToolName          = "edit_issue"
-	EditIssueCommentToolName   = "edit_issue_comment"
-	GetIssueCommentsByIndexToolName    = "get_issue_comments_by_index"
-
+	GetIssueByIndexToolName         = "get_issue_by_index"
+	ListRepoIssuesToolName          = "list_repo_issues"
+	CreateIssueToolName             = "create_issue"
+	CreateIssueCommentToolName      = "create_issue_comment"
+	EditIssueToolName               = "edit_issue"
+	EditIssueCommentToolName        = "edit_issue_comment"
+	GetIssueCommentsByIndexToolName = "get_issue_comments_by_index"
 )
 
 var (
@@ -55,7 +54,7 @@ var (
 		mcp.WithString("title", mcp.Required(), mcp.Description("issue title")),
 		mcp.WithString("body", mcp.Required(), mcp.Description("issue body")),
 	)
-	
+
 	CreateIssueCommentTool = mcp.NewTool(
 		CreateIssueCommentToolName,
 		mcp.WithDescription("create issue comment"),
@@ -64,7 +63,7 @@ var (
 		mcp.WithNumber("index", mcp.Required(), mcp.Description("repository issue index")),
 		mcp.WithString("body", mcp.Required(), mcp.Description("issue comment body")),
 	)
-	
+
 	EditIssueTool = mcp.NewTool(
 		EditIssueToolName,
 		mcp.WithDescription("edit issue"),
@@ -77,7 +76,7 @@ var (
 		mcp.WithNumber("milestone", mcp.Description("milestone number")),
 		mcp.WithString("state", mcp.Description("issue state, one of open, closed, all")),
 	)
-	
+
 	EditIssueCommentTool = mcp.NewTool(
 		EditIssueCommentToolName,
 		mcp.WithDescription("edit issue comment"),
@@ -118,11 +117,11 @@ func init() {
 		Handler: EditIssueFn,
 	})
 	Tool.RegisterWrite(server.ServerTool{
-		Tool: 	 EditIssueCommentTool,
+		Tool:    EditIssueCommentTool,
 		Handler: EditIssueCommentFn,
 	})
 	Tool.RegisterRead(server.ServerTool{
-		Tool: 	 GetIssueCommentsByIndexTool,
+		Tool:    GetIssueCommentsByIndexTool,
 		Handler: GetIssueCommentsByIndexFn,
 	})
 }
@@ -289,7 +288,6 @@ func EditIssueFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolRes
 	return to.TextResult(issue)
 }
 
-
 func EditIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	log.Debugf("Called EditIssueCommentFn")
 	owner, ok := req.GetArguments()["owner"].(string)
@@ -317,7 +315,6 @@ func EditIssueCommentFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.Call
 	}
 
 	return to.TextResult(issueComment)
-
 }
 
 func GetIssueCommentsByIndexFn(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {

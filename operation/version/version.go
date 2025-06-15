@@ -19,11 +19,9 @@ const (
 	GetGiteaMCPServerVersion = "get_gitea_mcp_server_version"
 )
 
-var (
-	GetGiteaMCPServerVersionTool = mcp.NewTool(
-		GetGiteaMCPServerVersion,
-		mcp.WithDescription("Get Gitea MCP Server Version"),
-	)
+var GetGiteaMCPServerVersionTool = mcp.NewTool(
+	GetGiteaMCPServerVersion,
+	mcp.WithDescription("Get Gitea MCP Server Version"),
 )
 
 func init() {
