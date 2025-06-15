@@ -22,8 +22,6 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 # Final stage
 FROM gcr.io/distroless/static-debian12:nonroot
 
-ENV GITEA_MODE=stdio
-
 WORKDIR /app
 COPY --from=builder --chown=nonroot:nonroot /app/gitea-mcp .
 

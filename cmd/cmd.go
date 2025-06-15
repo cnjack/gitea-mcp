@@ -80,8 +80,8 @@ func init() {
 		flagPkg.Token = os.Getenv("GITEA_ACCESS_TOKEN")
 	}
 
-	if os.Getenv("GITEA_MODE") != "" {
-		flagPkg.Mode = os.Getenv("GITEA_MODE")
+	if os.Getenv("MCP_MODE") != "" {
+		flagPkg.Mode = os.Getenv("MCP_MODE")
 	}
 
 	if os.Getenv("GITEA_READONLY") == "true" {
