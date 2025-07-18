@@ -32,5 +32,3 @@ LABEL org.opencontainers.image.version="${VERSION}"
 EXPOSE 8080
 
 ENTRYPOINT ["/app/gitea-mcp"]
-
-CMD ["/app/gitea-mcp"]
